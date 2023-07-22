@@ -2,64 +2,51 @@ package com.example.firstdemo.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
-
 
 import com.example.firstdemo.R;
 import com.example.firstdemo.api.Api;
 import com.example.firstdemo.api.ApiConfig;
 import com.example.firstdemo.api.TtitCallback;
-import com.example.firstdemo.entity.LoginResponse;
-import com.example.firstdemo.util.AppConfig;
 import com.example.firstdemo.util.StringUtils;
-import com.google.gson.Gson;
 
-import org.json.JSONObject;
+import java.util.HashMap;
 
-import java.io.IOException;
-import java.util.*;
-
-
-
-public class LoginActivity extends BaseActivity {
+public class RegisterActivity extends BaseActivity {
 
     private EditText etAccount;
     private EditText etPwd;
-    private Button btnLogin;
-
-
+    private Button btnRegister;
 
     @Override
     protected int initLayout() {
-        return R.layout.activity_login;
+        return R.layout.activity_register;
     }
 
     @Override
     protected void initView() {
         etAccount = findViewById(R.id.et_account);
         etPwd = findViewById(R.id.et_pwd);
-        btnLogin = findViewById(R.id.btn_login);
+        btnRegister = findViewById(R.id.btn_register);
     }
 
     @Override
     protected void initData() {
-        btnLogin.setOnClickListener(new View.OnClickListener() {
+        btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(View v) {
                 String account = etAccount.getText().toString().trim();
                 String pwd = etPwd.getText().toString().trim();
-                login(account, pwd);
+                register(account, pwd);
             }
         });
     }
 
-    private void login(String account, String pwd) {
+    private void register(String account, String pwd) {
         if (StringUtils.isEmpty(account)) {
             showToast("请输入账号");
             return;
@@ -71,26 +58,20 @@ public class LoginActivity extends BaseActivity {
         HashMap<String, Object> params = new HashMap<String, Object>();
         params.put("mobile", account);
         params.put("password", pwd);
-        Api.config(ApiConfig.LOGIN, params).postRequest(this,new TtitCallback() {
+        Api.config(ApiConfig.REGISTER, params).postRequest(this,new TtitCallback() {
             @Override
             public void onSuccess(final String res) {
-                Log.e("onSuccess", res);
-                Gson gson = new Gson();
-                LoginResponse loginResponse = gson.fromJson(res, LoginResponse.class);
-                if (loginResponse.getCode() == 0) {
-//                    String token = loginResponse.getToken();
-//                    insertVal("token", token);
-//                    navigateToWithFlag(HomeActivity.class,
-//                            Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                    showToastSync("登录成功");
-                } else {
-                    showToastSync("登录失败");
-                }
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        showToast(res);
+                    }
+                });
             }
 
             @Override
             public void onFailure(Exception e) {
-
+                Log.e("onFailure", e.toString());
             }
         });
     }

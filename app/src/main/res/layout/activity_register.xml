@@ -4,15 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activity.LoginActivity"
-    android:background="#ffffff">
-
-
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:elevation="4dp"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
+    android:background="@color/white">
 
     <ImageView
         android:layout_width="match_parent"
@@ -55,7 +47,7 @@
                     android:layout_marginLeft="20dp"
                     android:background="@null"
                     android:hint="@string/account_hint"
-                    android:textColor="#000000"
+                    android:textColor="@color/black"
                     android:textColorHint="#bcbcbc"
                     android:textSize="18sp" />
             </LinearLayout>
@@ -87,7 +79,7 @@
                     android:background="@null"
                     android:inputType="textPassword"
                     android:hint="@string/pwd_hint"
-                    android:textColor="#000000"
+                    android:textColor="@color/black"
                     android:textColorHint="#bcbcbc"
                     android:textSize="18sp" />
             </LinearLayout>
@@ -95,15 +87,15 @@
         </LinearLayout>
 
         <Button
-            android:id="@+id/btn_login"
+            android:id="@+id/btn_register"
             android:layout_width="match_parent"
             android:layout_height="55dp"
             android:layout_marginLeft="18dp"
             android:layout_marginTop="67dp"
             android:layout_marginRight="18dp"
-            android:background="@drawable/shape_big_login_btn"
-            android:text="@string/login"
-            android:textColor="#ffffff"
+            android:background="@drawable/shape_big_register_btn"
+            android:text="@string/register"
+            android:textColor="@color/white"
             android:textSize="24sp" />
     </LinearLayout>
 
