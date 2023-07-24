@@ -114,8 +114,8 @@ public class HomeFragment extends Fragment {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                // 执行下拉刷新操作，重新获取一页数据
-                currentPage++;
+                // 执行下拉刷新操作，重新获取第一页数据
+                currentPage = 0;
                 articles.clear();
                 getArticlesData(currentPage);
             }
@@ -184,6 +184,8 @@ public class HomeFragment extends Fragment {
                 }).addBannerLifecycleObserver(this)
                 .setIndicator(new CircleIndicator(requireContext()))
                 .setOnBannerListener(new OnBannerListener() {
+
+                    //TODO: 点击事件打开详情页面
                     @Override
                     public void OnBannerClick(Object data, int position) {
                         openDetailPage(position);

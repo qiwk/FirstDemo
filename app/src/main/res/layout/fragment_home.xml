@@ -22,7 +22,7 @@
             android:background="@android:color/transparent"
             android:paddingLeft="30dp"
             android:paddingTop="40dp"
-            android:src="@mipmap/ic_scan" />
+            android:src="@mipmap/icon_scan" />
 
         <!-- 首页标题 -->
         <TextView
@@ -44,7 +44,7 @@
             android:background="@android:color/transparent"
             android:paddingRight="30dp"
             android:paddingTop="40dp"
-            android:src="@mipmap/ic_search" />
+            android:src="@mipmap/icon_search" />
     </LinearLayout>
 
     <!-- Banner 组件 -->

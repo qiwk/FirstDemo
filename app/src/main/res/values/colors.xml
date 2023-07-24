@@ -3,4 +3,5 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="splashscreen_bg">#658eee</color>
+    <color name="home_btn_color">#0025ff</color>
 </resources>

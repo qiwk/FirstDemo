@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 
 import com.example.firstdemo.R;
+import com.example.firstdemo.activity.BaseActivity;
 import com.example.firstdemo.api.Api;
 import com.example.firstdemo.api.ApiConfig;
 import com.example.firstdemo.api.TtitCallback;

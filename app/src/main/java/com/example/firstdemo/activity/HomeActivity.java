@@ -1,12 +1,15 @@
 package com.example.firstdemo.activity;
 
-import androidx.appcompat.app.AppCompatActivity;
+import android.os.Bundle;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.splashscreen.SplashScreen;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
-import android.os.Bundle;
-
 import com.example.firstdemo.R;
+import com.example.firstdemo.activity.BaseActivity;
 import com.example.firstdemo.adapter.MyPagerAdapter;
 import com.example.firstdemo.entity.TabEntity;
 import com.example.firstdemo.fragment.HomeFragment;
@@ -26,8 +29,8 @@ public class HomeActivity extends BaseActivity {
             R.mipmap.home_unselect, R.mipmap.question_unselect,
             R.mipmap.system_unselect, R.mipmap.my_unselect};
     private int[] mIconSelectIds = {
-            R.mipmap.home_selected, R.mipmap.question_selected,
-            R.mipmap.system_selected, R.mipmap.my_selected};
+            R.mipmap.home_selected2, R.mipmap.question_selected2,
+            R.mipmap.system_selected2, R.mipmap.my_selected2};
 
 
     private ViewPager viewPager;
@@ -36,6 +39,12 @@ public class HomeActivity extends BaseActivity {
     private ArrayList<Fragment> mFragments = new ArrayList<>();
     private ArrayList<CustomTabEntity> mTabEntities = new ArrayList<>();
 
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        //起始页面动画
+        SplashScreen splashScreen = SplashScreen.installSplashScreen(this);
+        super.onCreate(savedInstanceState);
+    }
 
     @Override
     protected int initLayout() {
@@ -52,9 +61,9 @@ public class HomeActivity extends BaseActivity {
     protected void initData() {
 
         mFragments.add(HomeFragment.newInstance());
-        mFragments.add(MyFragment.newInstance());
         mFragments.add(QuestionFragment.newInstance());
         mFragments.add(SystemFragment.newInstance());
+        mFragments.add(MyFragment.newInstance());
 
         //封装按钮实体对象
         for (int i = 0; i < mTitles.length; i++) {

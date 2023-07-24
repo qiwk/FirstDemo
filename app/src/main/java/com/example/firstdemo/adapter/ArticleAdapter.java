@@ -1,5 +1,6 @@
 package com.example.firstdemo.adapter;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,7 +10,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.firstdemo.R;
+import com.example.firstdemo.activity.LoginActivity;
 import com.example.firstdemo.entity.Article;
+import com.example.firstdemo.util.TimeUtils;
 
 import java.util.List;
 
@@ -34,6 +37,17 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ArticleV
     public void onBindViewHolder(@NonNull ArticleViewHolder holder, int position) {
         Article article = articleList.get(position);
         holder.bindArticleData(article);
+
+        //点击列表项跳转到详情页面
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //TODO: 打开并渲染详情页
+                Intent in = new Intent(context, LoginActivity.class);
+                context.startActivity(in);
+            }
+        });
+
     }
 
     @Override
@@ -50,22 +64,23 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ArticleV
 
         private TextView titleTextView;
         private TextView authorTextView;
-        private TextView updateTimeTextView;
-        private TextView sourceTextView;
+        private TextView publishTimeTextView;
+        private TextView originTextView;
 
         public ArticleViewHolder(@NonNull View itemView) {
             super(itemView);
             titleTextView = itemView.findViewById(R.id.titleTextView);
             authorTextView = itemView.findViewById(R.id.authorTextView);
-            updateTimeTextView = itemView.findViewById(R.id.publishTimeTextView);
-            sourceTextView = itemView.findViewById(R.id.originTextView);
+            publishTimeTextView = itemView.findViewById(R.id.publishTimeTextView);
+            originTextView = itemView.findViewById(R.id.originTextView);
         }
 
         public void bindArticleData(Article article) {
             titleTextView.setText(article.getTitle());
-            authorTextView.setText("Author: " + article.getAuthor());
-            updateTimeTextView.setText("Updated: " + article.getPublishTime());
-            sourceTextView.setText("Source: " + article.getOrigin());
+            String Author = article.getAuthor().length()==0?article.getShareUser():article.getAuthor();
+            authorTextView.setText(Author);
+            publishTimeTextView.setText(TimeUtils.getTimeAgo(article.getPublishTime()));
+            originTextView.setText(article.getSuperChapterName());
         }
     }
 }

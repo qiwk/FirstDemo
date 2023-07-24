@@ -1,16 +1,194 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".fragment.MyFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="我的页面"
-        android:textColor="@color/black"
-        android:textSize="30sp"/>
 
-</FrameLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="280dp"
+        android:background="@color/splashscreen_bg"
+        android:orientation="vertical">
+
+        <ImageButton
+            android:id="@+id/btnBell"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="45dp"
+            android:layout_marginLeft="350dp"
+            android:background="@android:color/transparent"
+            android:src="@mipmap/bell" />
+
+        <ImageView
+            android:id="@+id/headImage"
+            android:layout_width="85dp"
+            android:layout_height="85dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="30dp"
+            android:src="@drawable/shape_gray_circle"/>
+
+        <Button
+            android:id="@+id/loginButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="去登录"
+            android:textSize="23sp"
+            android:textColor="@color/white"
+            android:background="@android:color/transparent" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+
+        <TextView
+            android:id="@+id/myScore"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:paddingEnd="10dp"
+            android:paddingStart="10dp"
+            android:drawablePadding="8dp"
+            android:text="我的积分"
+            android:drawableStart="@mipmap/icon_score"
+            android:drawableEnd="@mipmap/icon_next"
+            android:textColor="@color/black"
+            android:textSize="17sp"/>
+
+        <TextView
+            android:id="@+id/myShare"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:drawablePadding="8dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:text="我的分享"
+            android:drawableStart="@mipmap/icon_share"
+            android:drawableEnd="@mipmap/icon_next"
+            android:textColor="@color/black"
+            android:textSize="17sp"/>
+
+        <TextView
+            android:id="@+id/myCollect"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:drawablePadding="8dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:text="我的收藏"
+            android:drawableStart="@mipmap/icon_collect2"
+            android:drawableEnd="@mipmap/icon_next"
+            android:textColor="@color/black"
+            android:textSize="17sp"/>
+
+
+        <TextView
+            android:id="@+id/laterRead"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:drawablePadding="8dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:text="稍后阅读"
+            android:drawableStart="@mipmap/icon_later_read"
+            android:drawableEnd="@mipmap/icon_next"
+            android:textColor="@color/black"
+            android:textSize="17sp"/>
+
+
+        <TextView
+            android:id="@+id/readHistory"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:drawablePadding="8dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:text="阅读历史"
+            android:drawableStart="@mipmap/icon_history"
+            android:drawableEnd="@mipmap/icon_next"
+            android:textColor="@color/black"
+            android:textSize="17sp"/>
+
+
+        <TextView
+            android:id="@+id/openProject"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:drawablePadding="8dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:text="开源项目"
+            android:drawableStart="@mipmap/icon_github"
+            android:drawableEnd="@mipmap/icon_next"
+            android:textColor="@color/black"
+            android:textSize="17sp"/>
+
+        <TextView
+            android:id="@+id/aboutAuthor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:drawablePadding="8dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:text="关于作者"
+            android:drawableStart="@mipmap/icon_about_author"
+            android:drawableEnd="@mipmap/icon_next"
+            android:textColor="@color/black"
+            android:textSize="17sp"/>
+
+
+        <TextView
+            android:id="@+id/systemSetting"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:drawablePadding="8dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:text="系统设置"
+            android:drawableStart="@mipmap/icon_setting"
+            android:drawableEnd="@mipmap/icon_next"
+            android:textColor="@color/black"
+            android:textSize="17sp"/>
+
+
+
+
+
+
+    </LinearLayout>
+
+
+
+
+</LinearLayout>

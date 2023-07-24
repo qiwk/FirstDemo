@@ -1,17 +1,13 @@
 package com.example.firstdemo;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.splashscreen.SplashScreen;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 
 import com.example.firstdemo.activity.BaseActivity;
 import com.example.firstdemo.activity.HomeActivity;
-import com.example.firstdemo.activity.LoginActivity;
 import com.example.firstdemo.activity.RegisterActivity;
 
 public class MainActivity extends BaseActivity {
@@ -23,7 +19,7 @@ public class MainActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         //起始页面动画
-        SplashScreen splashScreen = SplashScreen.installSplashScreen(this);
+        //SplashScreen splashScreen = SplashScreen.installSplashScreen(this);
         super.onCreate(savedInstanceState);
         setContentView(initLayout());
         initView();
