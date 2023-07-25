@@ -29,6 +29,8 @@
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
     </style>
 
+    <style name="FistDemoThemeAppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+
 
 </resources>
 

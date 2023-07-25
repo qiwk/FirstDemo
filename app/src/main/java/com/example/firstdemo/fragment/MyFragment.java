@@ -21,6 +21,7 @@ import com.example.firstdemo.activity.MyScoreActivity;
 import com.example.firstdemo.activity.MyShareActivity;
 import com.example.firstdemo.activity.OpenProjectActivity;
 import com.example.firstdemo.activity.SystemSettingActivity;
+import com.google.android.material.appbar.AppBarLayout;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -38,6 +39,9 @@ public class MyFragment extends Fragment {
     private TextView openProjectView;
     private TextView aboutAuthorView;
     private TextView systemSettingView;
+
+    private AppBarLayout appBarLayout;
+    private View upperLayout;
 
 
 
@@ -73,6 +77,22 @@ public class MyFragment extends Fragment {
         systemSettingView = view.findViewById(R.id.systemSetting);
         //设置监听事件跳转到不同的页面
         setListeners();
+
+        //设置上拉折叠逻辑
+        appBarLayout = view.findViewById(R.id.app_bar_layout);
+        upperLayout = view.findViewById(R.id.upper_layout);
+
+        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                // 获取AppBarLayout的滚动距离和总高度
+                int scrollRange = appBarLayout.getTotalScrollRange();
+                float alpha = 1 - (float) Math.abs(verticalOffset) / scrollRange;
+
+                // 设置上半部分的透明度
+                upperLayout.setAlpha(alpha);
+            }
+        });
         return view;
     }
 
