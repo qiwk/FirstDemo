@@ -2,15 +2,24 @@ package com.example.firstdemo.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.firstdemo.R;
 import com.example.firstdemo.activity.BaseActivity;
 import com.example.firstdemo.api.Api;
@@ -33,6 +42,9 @@ public class LoginActivity extends BaseActivity {
     private EditText etAccount;
     private EditText etPwd;
     private Button btnLogin;
+    private TextView tvGoRegister;
+
+
 
 
 
@@ -46,10 +58,23 @@ public class LoginActivity extends BaseActivity {
         etAccount = findViewById(R.id.et_account);
         etPwd = findViewById(R.id.et_pwd);
         btnLogin = findViewById(R.id.btn_login);
+        tvGoRegister = findViewById(R.id.tv_go_register);
     }
 
     @Override
     protected void initData() {
+
+
+
+
+        //监听跳转注册页面
+        tvGoRegister.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                navigateTo(RegisterActivity.class);
+            }
+        });
+
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -58,6 +83,8 @@ public class LoginActivity extends BaseActivity {
                 login(account, pwd);
             }
         });
+
+
     }
 
     private void login(String account, String pwd) {
@@ -69,18 +96,26 @@ public class LoginActivity extends BaseActivity {
             showToast("请输入密码");
             return;
         }
-        HashMap<String, Object> params = new HashMap<String, Object>();
-        params.put("mobile", account);
+
+
+        HashMap<String, String> params = new HashMap<String, String>();
+        params.put("username", account);
         params.put("password", pwd);
+
+
         Api.config(ApiConfig.LOGIN, params).postRequest(this,new TtitCallback() {
             @Override
-            public void onSuccess(final String res) {
-                Log.e("onSuccess", res);
+            public void onSuccess(final String resBody, final String resCookie) {
+                Log.d("onSuccess", resBody);
+                Log.d("Cookie", resCookie);
                 Gson gson = new Gson();
-                LoginResponse loginResponse = gson.fromJson(res, LoginResponse.class);
-                if (loginResponse.getCode() == 0) {
-//                    String token = loginResponse.getToken();
-//                    insertVal("token", token);
+                LoginResponse loginResponse = gson.fromJson(resBody, LoginResponse.class);
+                if (loginResponse.getErrorCode() == 0) {
+
+                    //登录成功，保存token到本地并跳转
+                    insertVal(loginResponse.getLoginData().getNickname(), resCookie);
+                    setResult(Activity.RESULT_OK);
+                    finish();
 //                    navigateToWithFlag(HomeActivity.class,
 //                            Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                     showToastSync("登录成功");
@@ -95,4 +130,7 @@ public class LoginActivity extends BaseActivity {
             }
         });
     }
+
+
+
 }

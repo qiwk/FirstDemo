@@ -6,11 +6,16 @@
     tools:context=".activity.LoginActivity"
     android:background="@color/white">
 
-    <ImageView
+    <View
         android:layout_width="match_parent"
         android:layout_height="329dp"
-        android:scaleType="fitXY"
-        android:src="@mipmap/login"/>
+        android:background="@color/splashscreen_bg" />
+    <ImageView
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:scaleType="centerCrop"
+        android:layout_centerHorizontal="true"
+        android:src="@mipmap/ic_launcher_red_foreground"/>
 
     <LinearLayout
         android:layout_width="match_parent"

@@ -50,10 +50,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:text="去登录"
+                    android:text="登录或注册"
                     android:textSize="23sp"
                     android:textColor="@color/white"
+                    android:textAllCaps="false"
                     android:background="@android:color/transparent" />
+
             </LinearLayout>
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
@@ -211,7 +213,25 @@
                 android:textColor="@color/black"
                 android:textSize="17sp"/>
 
+            <TextView
+                android:id="@+id/tv_logout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:drawablePadding="7dp"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:text="退出登录"
+                android:drawableStart="@mipmap/icon_logout2"
+                android:drawableEnd="@mipmap/icon_next"
+                android:textColor="@color/black"
+                android:textSize="17sp"/>
+
         </LinearLayout>
+
+
 
     </androidx.core.widget.NestedScrollView>
 

@@ -1,7 +1,10 @@
 package com.example.firstdemo.fragment;
 
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -9,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.firstdemo.R;
@@ -21,6 +25,7 @@ import com.example.firstdemo.activity.MyScoreActivity;
 import com.example.firstdemo.activity.MyShareActivity;
 import com.example.firstdemo.activity.OpenProjectActivity;
 import com.example.firstdemo.activity.SystemSettingActivity;
+import com.example.firstdemo.util.CommonUtils;
 import com.google.android.material.appbar.AppBarLayout;
 
 /**
@@ -31,6 +36,8 @@ import com.google.android.material.appbar.AppBarLayout;
 public class MyFragment extends Fragment {
 
     private Button loginButton;
+
+    private ImageView headImage;
     private TextView myScoreView;
     private TextView myShareView;
     private TextView myCollectView;
@@ -42,6 +49,8 @@ public class MyFragment extends Fragment {
 
     private AppBarLayout appBarLayout;
     private View upperLayout;
+
+    private static final int REQUEST_LOGIN = 1;
 
 
 
@@ -67,6 +76,7 @@ public class MyFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_my, container, false);
 
         loginButton = (Button) view.findViewById(R.id.loginButton);
+        headImage = view.findViewById(R.id.headImage);
         myScoreView = view.findViewById(R.id.myScore);
         myShareView = view.findViewById(R.id.myShare);
         myCollectView = view.findViewById(R.id.myCollect);
@@ -75,9 +85,10 @@ public class MyFragment extends Fragment {
         openProjectView = view.findViewById(R.id.openProject);
         aboutAuthorView = view.findViewById(R.id.aboutAuthor);
         systemSettingView = view.findViewById(R.id.systemSetting);
+
+
         //设置监听事件跳转到不同的页面
         setListeners();
-
         //设置上拉折叠逻辑
         appBarLayout = view.findViewById(R.id.app_bar_layout);
         upperLayout = view.findViewById(R.id.upper_layout);
@@ -93,6 +104,14 @@ public class MyFragment extends Fragment {
                 upperLayout.setAlpha(alpha);
             }
         });
+
+        // 判断登录状态，如果已登录，则显示用户头像和用户名，隐藏登录按钮
+        if (isLoggedIn()) {
+            showLoggedInState();
+        } else {
+            showLoggedOutState();
+        }
+
         return view;
     }
 
@@ -117,6 +136,8 @@ public class MyFragment extends Fragment {
             int id = view.getId();
             if (id == R.id.loginButton){
                 intent = new Intent(getContext(), LoginActivity.class);
+                startActivityForResult(intent, REQUEST_LOGIN);
+                return;
             }else if(id == R.id.myScore){
                 intent = new Intent(getContext(), MyScoreActivity.class);
             }else if(id == R.id.myShare){
@@ -138,5 +159,54 @@ public class MyFragment extends Fragment {
         }
 
     }
+
+
+    // 显示登录后的界面
+    private void showLoggedInState() {
+
+        int avatarResId = R.drawable.home_selected; // 根据实际情况获取头像资源ID
+        headImage.setImageResource(avatarResId);
+        loginButton.setText(getSavedUsername());
+        loginButton.setOnClickListener(null);//解除监听器
+    }
+
+    // 显示登录前的界面
+    private void showLoggedOutState() {
+        headImage.setImageResource(R.drawable.shape_gray_circle); // 显示默认头像
+        loginButton.setText("登录或注册");
+        //重亲加上监听器
+        loginButton.setOnClickListener(null);
+        loginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getContext(), LoginActivity.class);
+                startActivityForResult(intent, REQUEST_LOGIN);
+            }
+        });
+
+    }
+
+    // 在登录界面登录成功后回调此方法，用于刷新界面显示
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_LOGIN && resultCode == Activity.RESULT_OK) {
+            // 登录成功，刷新界面显示
+            showLoggedInState();
+        }
+    }
+
+    private String getSavedUsername() {
+        // 在这里从SharedPreferences或全局变量中获取保存的用户名信息
+        SharedPreferences sp = getActivity().getSharedPreferences("sp_qiwk", Context.MODE_PRIVATE);
+        return sp.getString("username", "");
+    }
+
+    private boolean isLoggedIn() {
+        // 在这里从SharedPreferences或全局变量中获取保存的用户名信息
+        SharedPreferences sp = getActivity().getSharedPreferences("sp_qiwk", Context.MODE_PRIVATE);
+        return sp.contains("password");
+    }
+
 }
 

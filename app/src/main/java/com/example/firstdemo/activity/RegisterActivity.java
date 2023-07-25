@@ -55,16 +55,16 @@ public class RegisterActivity extends BaseActivity {
             showToast("请输入密码");
             return;
         }
-        HashMap<String, Object> params = new HashMap<String, Object>();
-        params.put("mobile", account);
+        HashMap<String, String> params = new HashMap<String, String>();
+        params.put("username", account);
         params.put("password", pwd);
         Api.config(ApiConfig.REGISTER, params).postRequest(this,new TtitCallback() {
             @Override
-            public void onSuccess(final String res) {
+            public void onSuccess(final String resBody, final String resCookie) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        showToast(res);
+                        showToast(resBody);
                     }
                 });
             }

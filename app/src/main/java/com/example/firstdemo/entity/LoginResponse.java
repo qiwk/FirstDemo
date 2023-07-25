@@ -1,48 +1,45 @@
 package com.example.firstdemo.entity;
 
+import com.google.gson.annotations.SerializedName;
+
+import java.util.List;
+
 public class LoginResponse {
 
+
     /**
-     * msg : success
-     * code : 0
-     * expire : 604800
-     * token : eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI2IiwiaWF0IjoxNTkyNDg2OTQzLCJleHAiOjE1OTMwOTE3NDN9.f5sxyG60GyDlj0FcZEmPAADiLHX_pATrvicxbADqvRqYurYQC5s0KAjw5XgHS4gpk-qUSwWtcJpY_nJjYf_2Dw
+     * data : {"admin":false,"chapterTops":[],"coinCount":10,"collectIds":[],"email":"","icon":"","id":151394,"nickname":"qiwk","password":"","publicName":"qiwk","token":"","type":0,"username":"qiwk"}
+     * errorCode : 0
+     * errorMsg :
      */
 
-    private String msg;
-    private int code;
-    private int expire;
-    private String token;
+    @SerializedName("data")
+    private LoginBean loginData;
+    private int errorCode;
+    private String errorMsg;
 
-    public String getMsg() {
-        return msg;
+    public LoginBean getLoginData() {
+        return loginData;
     }
 
-    public void setMsg(String msg) {
-        this.msg = msg;
+    public void setLoginData(LoginBean loginData) {
+        this.loginData = loginData;
     }
 
-    public int getCode() {
-        return code;
+    public int getErrorCode() {
+        return errorCode;
     }
 
-    public void setCode(int code) {
-        this.code = code;
+    public void setErrorCode(int errorCode) {
+        this.errorCode = errorCode;
     }
 
-    public int getExpire() {
-        return expire;
+    public String getErrorMsg() {
+        return errorMsg;
     }
 
-    public void setExpire(int expire) {
-        this.expire = expire;
+    public void setErrorMsg(String errorMsg) {
+        this.errorMsg = errorMsg;
     }
 
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
-    }
 }

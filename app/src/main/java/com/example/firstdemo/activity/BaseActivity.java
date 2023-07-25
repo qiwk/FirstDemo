@@ -2,6 +2,7 @@ package com.example.firstdemo.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Looper;
 import android.widget.Toast;
@@ -44,6 +45,14 @@ public abstract class BaseActivity extends AppCompatActivity {
         Looper.prepare();
         Toast.makeText(mContext, msg, Toast.LENGTH_SHORT).show();
         Looper.loop();
+    }
+
+    protected void insertVal(String key, String val) {
+        SharedPreferences sp = getSharedPreferences("sp_qiwk", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putString("username", key);
+        editor.putString("password", val);
+        editor.commit();
     }
 
     public void navigateTo(Class cls) {
