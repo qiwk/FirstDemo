@@ -49,14 +49,24 @@ public class Api {
         return api;
     }
 
-    public void postRequest(Context context, final TtitCallback callback) {
 
-        // 第二步构建POST请求的RequestBody
-        RequestBody requestBody = new FormBody.Builder()
-                .add("username", mParams.get("username"))
-                .add("password", mParams.get("password"))
-                .build();
 
+    public void postRequest( final TtitCallback callback) {
+
+        RequestBody requestBody;
+        if (mParams.containsKey("originId")){
+            // 第二步构建POST请求的RequestBody
+            requestBody = new FormBody.Builder()
+                    .add("originId", mParams.get("originId"))
+                    .build();
+
+        }else{
+            // 第二步构建POST请求的RequestBody
+            requestBody = new FormBody.Builder()
+                    .add("username", mParams.get("username"))
+                    .add("password", mParams.get("password"))
+                    .build();
+        }
         //第三步创建Rquest
         Request request = new Request.Builder()
                 .url(requestUrl)
@@ -75,10 +85,129 @@ public class Api {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 final String result = response.body().string();
-                final String resCookie = "" + response.header("Set-Cookie").split(";")[0].split("=")[1];
+                Log.d("headers", response.headers().toString());
+                final List<String> resCookie = response.headers("Set-Cookie");
                 callback.onSuccess(result, resCookie);
             }
         });
+    }
+
+
+    public void getRequest(final TtitCallback callback) {
+        Request request = new Request.Builder()
+                .url(requestUrl)
+                .get()
+                .build();
+        Call call = client.newCall(request);
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.e("onFailure", e.getMessage());
+                callback.onFailure(e);
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                final String result = response.body().string();
+                final List<String> resCookie = response.headers("Set-Cookie");
+                callback.onSuccess(result, resCookie);
+            }
+        });
+    }
+
+
+    public void postRequestWithCookie(String cookieStr, final TtitCallback callback) {
+
+        RequestBody requestBody;
+        if (mParams.containsKey("originId")){
+            // 第二步构建POST请求的RequestBody
+            requestBody = new FormBody.Builder()
+                    .add("originId", mParams.get("originId"))
+                    .build();
+
+        }else{
+            // 第二步构建POST请求的RequestBody
+            requestBody = new FormBody.Builder()
+                    .add("username", mParams.get("username"))
+                    .add("password", mParams.get("password"))
+                    .build();
+        }
+
+        //第三步创建Rquest
+        String[] cookie = cookieStr.split("----");
+        Request.Builder requestBuilder = new Request.Builder().url(requestUrl);
+        for (String ck : cookie) {
+            requestBuilder.addHeader("Cookie", ck);
+        }
+        Request request = requestBuilder.post(requestBody).build();
+        //第四步创建call回调对象
+        final Call call = client.newCall(request);
+        //第五步发起请求
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.e("onFailure", e.getMessage());
+                callback.onFailure(e);
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                final String result = response.body().string();
+                final List<String> resCookie = response.headers("Set-Cookie");
+                callback.onSuccess(result, resCookie);
+            }
+        });
+    }
+
+
+    public void getRequestWithCookie(String cookieStr, final TtitCallback callback) {
+
+        String[] cookie = cookieStr.split("----");
+
+        Request.Builder requestBuilder = new Request.Builder()
+                .url(requestUrl);
+
+        for (String ck : cookie) {
+            requestBuilder.addHeader("Cookie", ck);
+        }
+
+        Log.d("requestBuilder", requestBuilder.toString());
+
+        Request request = requestBuilder.get().build();
+
+        Call call = client.newCall(request);
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.e("onFailure", e.getMessage());
+                callback.onFailure(e);
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                final String result = response.body().string();
+                final List<String> resCookie = response.headers("Set-Cookie");
+                callback.onSuccess(result, resCookie);
+            }
+        });
+    }
+
+    private String getAppendUrl(String url, Map<String, Object> map) {
+        if (map != null && !map.isEmpty()) {
+            StringBuffer buffer = new StringBuffer();
+            Iterator<Entry<String, Object>> iterator = map.entrySet().iterator();
+            while (iterator.hasNext()) {
+                Entry<String, Object> entry = iterator.next();
+                if (StringUtils.isEmpty(buffer.toString())) {
+                    buffer.append("?");
+                } else {
+                    buffer.append("&");
+                }
+                buffer.append(entry.getKey()).append("=").append(entry.getValue());
+            }
+            url += buffer.toString();
+        }
+        return url;
     }
 
 

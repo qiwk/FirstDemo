@@ -8,6 +8,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.os.Handler;
+import android.os.Looper;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,9 +25,15 @@ import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.example.firstdemo.MainActivity;
 import com.example.firstdemo.R;
+import com.example.firstdemo.activity.MyCollectActivity;
 import com.example.firstdemo.adapter.ArticleAdapter;
+import com.example.firstdemo.api.Api;
+import com.example.firstdemo.api.ApiConfig;
+import com.example.firstdemo.api.TtitCallback;
 import com.example.firstdemo.entity.Article;
 import com.example.firstdemo.entity.ArticleResponse;
+import com.example.firstdemo.util.CommonUtils;
+import com.example.firstdemo.util.ToastUtil;
 import com.google.gson.Gson;
 import com.youth.banner.Banner;
 import com.youth.banner.adapter.BannerImageAdapter;
@@ -35,6 +44,7 @@ import com.youth.banner.listener.OnBannerListener;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -56,6 +66,8 @@ public class HomeFragment extends Fragment {
     private int currentPage;
     private boolean isLoadingMore;
 
+    private Handler handler; // 声明一个Handler，用于在主线程中更新UI
+
 
 
     public HomeFragment() {
@@ -73,6 +85,9 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
+
+        // 初始化Handler
+        handler = new Handler(Looper.getMainLooper());
         // 初始化 Banner 组件
         banner = view.findViewById(R.id.banner);
         setupBanner();
@@ -123,33 +138,66 @@ public class HomeFragment extends Fragment {
         return view;
     }
 
+
     private void getArticlesData(int page) {
-        String url = BASE_URL + page + "/json";
 
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
-                new Response.Listener<JSONObject>() {
+
+        HashMap<String, String> params = new HashMap<String, String>();
+        params.put("username", "account");
+        params.put("password", "pwd");
+
+
+        String restUrl = ApiConfig.HOME_ARTICLE + "/" +  page + "/json";
+        String cookieStr = CommonUtils.getCookie(getContext());
+        Api.config(restUrl, params).getRequestWithCookie(cookieStr, new TtitCallback() {
+            @Override
+            public void onSuccess(final String resBody, final List<String> resCookie) {
+                Log.d("onSuccess", resBody);
+                Log.d("Cookie", resCookie.toString());
+                Gson gson = new Gson();
+                ArticleResponse articleResponse = gson.fromJson(resBody, ArticleResponse.class);
+                if (articleResponse.getErrorCode() == 0) {
+                    // 使用Handler在主线程中更新UI
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            // 在这里更新UI控件，例如显示用户名和头像
+                            articles.addAll(articleResponse.getPageBean().getArticleList());
+                            // 更新RecyclerView的数据
+                            ArticleAdapter articleAdapter = (ArticleAdapter) articleRecyclerView.getAdapter();
+                            articleAdapter.setArticleList(articles);
+                            articleAdapter.notifyDataSetChanged();
+
+                            // 停止下拉刷新动画
+                            swipeRefreshLayout.setRefreshing(false);
+                            //设置加载更多标志为false，表示加载完成
+                            isLoadingMore = false;
+                        }
+                    });
+                } else {
+                    // 使用Handler在主线程中更新UI
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            // 在这里更新UI控件，例如显示用户名和头像
+                            ToastUtil.showMsg(getContext(), "获取文章列表失败！");
+                            //设置加载更多标志为false，表示加载完成
+                            isLoadingMore = false;
+                            // 停止下拉刷新动画
+                            swipeRefreshLayout.setRefreshing(false);
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                // 使用Handler在主线程中更新UI
+                handler.post(new Runnable() {
                     @Override
-                    public void onResponse(JSONObject response) {
-
-                        String jsonString = response.toString();
-                        Gson gson = new Gson();
-                        ArticleResponse articleResponse = gson.fromJson(jsonString, ArticleResponse.class);
-                        articles.addAll(articleResponse.getPageBean().getArticleList());
-                        // 更新RecyclerView的数据
-                        ArticleAdapter articleAdapter = (ArticleAdapter) articleRecyclerView.getAdapter();
-                        articleAdapter.setArticleList(articles);
-                        articleAdapter.notifyDataSetChanged();
-
-                        // 停止下拉刷新动画
-                        swipeRefreshLayout.setRefreshing(false);
-                        //设置加载更多标志为false，表示加载完成
-                        isLoadingMore = false;
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.e("VolleyError", "Error while fetching data: " + error.toString());
+                    public void run() {
+                        // 在这里更新UI控件，例如显示用户名和头像
+                        ToastUtil.showMsg(getContext(), "网络请求列表失败！");
                         //设置加载更多标志为false，表示加载完成
                         isLoadingMore = false;
                         // 停止下拉刷新动画
@@ -157,11 +205,10 @@ public class HomeFragment extends Fragment {
                     }
                 });
 
-        // 将请求添加到请求队列
-        requestQueue.add(jsonObjectRequest);
+            }
+        });
         // 设置加载更多标志为true，表示正在加载中
         isLoadingMore = true;
-
     }
 
 
@@ -206,9 +253,8 @@ public class HomeFragment extends Fragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         articleRecyclerView.setLayoutManager(layoutManager);
         // 创建文章列表适配器并设置给RecyclerView
-        ArticleAdapter articleAdapter = new ArticleAdapter(getContext(), articles);
+        ArticleAdapter articleAdapter = new ArticleAdapter(getContext(), articles, false);
         articleRecyclerView.setAdapter(articleAdapter);
     }
-
 
 }

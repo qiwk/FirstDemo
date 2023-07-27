@@ -28,6 +28,7 @@ import com.example.firstdemo.api.TtitCallback;
 import com.example.firstdemo.entity.LoginResponse;
 import com.example.firstdemo.util.AppConfig;
 import com.example.firstdemo.util.StringUtils;
+import com.example.firstdemo.util.ToastUtil;
 import com.google.gson.Gson;
 
 import org.json.JSONObject;
@@ -103,24 +104,24 @@ public class LoginActivity extends BaseActivity {
         params.put("password", pwd);
 
 
-        Api.config(ApiConfig.LOGIN, params).postRequest(this,new TtitCallback() {
+        Api.config(ApiConfig.LOGIN, params).postRequest(new TtitCallback() {
             @Override
-            public void onSuccess(final String resBody, final String resCookie) {
+            public void onSuccess(final String resBody, final List<String> resCookie) {
                 Log.d("onSuccess", resBody);
-                Log.d("Cookie", resCookie);
+                Log.d("Cookie", resCookie.toString());
                 Gson gson = new Gson();
                 LoginResponse loginResponse = gson.fromJson(resBody, LoginResponse.class);
                 if (loginResponse.getErrorCode() == 0) {
-
                     //登录成功，保存token到本地并跳转
-                    insertVal(loginResponse.getLoginData().getNickname(), resCookie);
+                    String cookieStr = String.join("----", resCookie);
+                    insertVal(loginResponse.getLoginData().getNickname(), cookieStr);
                     setResult(Activity.RESULT_OK);
                     finish();
 //                    navigateToWithFlag(HomeActivity.class,
 //                            Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                    showToastSync("登录成功");
+                    showToastSync("登录成功！");
                 } else {
-                    showToastSync("登录失败");
+                    showToastSync("登录失败！");
                 }
             }
 

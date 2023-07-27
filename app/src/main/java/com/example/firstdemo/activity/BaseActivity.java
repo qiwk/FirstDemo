@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.example.firstdemo.R;
+import com.example.firstdemo.util.ToastUtil;
 
 public abstract class BaseActivity extends AppCompatActivity {
 
@@ -37,13 +38,13 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected abstract void initData();
 
     public void showToast(String msg){
-        Toast.makeText(mContext, msg, Toast.LENGTH_SHORT).show();
+        ToastUtil.showMsg(mContext, msg);
     }
 
     //异步弹提示消息
     public void showToastSync(String msg) {
         Looper.prepare();
-        Toast.makeText(mContext, msg, Toast.LENGTH_SHORT).show();
+        ToastUtil.showMsg(mContext, msg);
         Looper.loop();
     }
 
@@ -51,7 +52,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         SharedPreferences sp = getSharedPreferences("sp_qiwk", MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
         editor.putString("username", key);
-        editor.putString("password", val);
+        editor.putString("cookie", val);
         editor.commit();
     }
 

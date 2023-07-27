@@ -15,6 +15,7 @@ import com.example.firstdemo.api.TtitCallback;
 import com.example.firstdemo.util.StringUtils;
 
 import java.util.HashMap;
+import java.util.List;
 
 public class RegisterActivity extends BaseActivity {
 
@@ -58,9 +59,9 @@ public class RegisterActivity extends BaseActivity {
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("username", account);
         params.put("password", pwd);
-        Api.config(ApiConfig.REGISTER, params).postRequest(this,new TtitCallback() {
+        Api.config(ApiConfig.REGISTER, params).postRequest(new TtitCallback() {
             @Override
-            public void onSuccess(final String resBody, final String resCookie) {
+            public void onSuccess(final String resBody, final List<String> resCookie) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {

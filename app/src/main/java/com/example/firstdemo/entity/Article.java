@@ -76,6 +76,17 @@ public class Article {
     private int userId;
     private int visible;
     private int zan;
+
+    private int originId;
+
+    public int getOriginId() {
+        return originId;
+    }
+
+    public void setOriginId(int originId) {
+        this.originId = originId;
+    }
+
     private List<TagsBean> tags;
 
     public boolean isAdminAdd() {
