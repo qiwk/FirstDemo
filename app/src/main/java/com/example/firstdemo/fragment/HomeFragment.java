@@ -25,6 +25,7 @@ import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.example.firstdemo.MainActivity;
 import com.example.firstdemo.R;
+import com.example.firstdemo.activity.ArticleDetailActivity;
 import com.example.firstdemo.activity.MyCollectActivity;
 import com.example.firstdemo.adapter.ArticleAdapter;
 import com.example.firstdemo.api.Api;
@@ -220,6 +221,11 @@ public class HomeFragment extends Fragment {
         bannerImageUrls.add("https://www.wanandroid.com/blogimgs/42da12d8-de56-4439-b40c-eab66c227a4b.png");
         bannerImageUrls.add("https://www.wanandroid.com/blogimgs/62c1bd68-b5f3-4a3c-a649-7ca8c7dfabe6.png");
         bannerImageUrls.add("https://www.wanandroid.com/blogimgs/50c115c2-cf6c-4802-aa7b-a4334de444cd.png");
+
+        List<String> imageLinkUrls = new ArrayList<>();
+        imageLinkUrls.add("https://www.wanandroid.com/blog/show/3352");
+        imageLinkUrls.add("https://www.wanandroid.com/navi");
+        imageLinkUrls.add("https://www.wanandroid.com/blog/show/2");
         banner.setAdapter(new BannerImageAdapter<String>(bannerImageUrls) {
                     @Override
                     public void onBindView(BannerImageHolder holder, String imageUrl, int position, int size) {
@@ -232,10 +238,10 @@ public class HomeFragment extends Fragment {
                 .setIndicator(new CircleIndicator(requireContext()))
                 .setOnBannerListener(new OnBannerListener() {
 
-                    //TODO: 点击事件打开详情页面
+                    //点击事件打开详情页面
                     @Override
                     public void OnBannerClick(Object data, int position) {
-                        openDetailPage(position);
+                        openDetailPage(imageLinkUrls.get(position));
                     }
                 });
         banner.setLoopTime(3000); // 设置自动滚动间隔时间
@@ -243,8 +249,9 @@ public class HomeFragment extends Fragment {
     }
 
     //跳转到详情页
-    private void openDetailPage(int position){
-        Intent in = new Intent(getContext(), MainActivity.class);
+    private void openDetailPage(String url){
+        Intent in = new Intent(getContext(), ArticleDetailActivity.class);
+        in.putExtra("article_url", url);
         startActivity(in);
     }
 

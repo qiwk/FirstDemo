@@ -26,8 +26,8 @@ public abstract class BaseActivity extends AppCompatActivity {
         initView();
         initData();
         //设置toolbar为actionbar
-        Toolbar tool_bar = findViewById(R.id.toolbar);
-        setSupportActionBar(tool_bar);
+//        Toolbar tool_bar = findViewById(R.id.toolbar);
+//        setSupportActionBar(tool_bar);
     }
 
 

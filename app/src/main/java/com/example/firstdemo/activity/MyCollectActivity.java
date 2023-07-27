@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -88,6 +89,9 @@ public class MyCollectActivity extends AppCompatActivity {
                 }
             }
         });
+
+        //设置返回键
+        findViewById(R.id.btn_goback).setOnClickListener(v -> onBackPressed());
     }
 
     private void getArticlesData(int page) {
@@ -96,8 +100,6 @@ public class MyCollectActivity extends AppCompatActivity {
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("username", "account");
         params.put("password", "pwd");
-
-
 
         String restUrl = ApiConfig.MY_COLLECT + "/" +  page + "/json";
         String cookieStr = CommonUtils.getCookie(MyCollectActivity.this);
@@ -145,6 +147,8 @@ public class MyCollectActivity extends AppCompatActivity {
         // 设置加载更多标志为true，表示正在加载中
         isLoadingMore = true;
     }
+
+
 
     private void setupRecyclerView() {
         // 初始化文章列表

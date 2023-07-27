@@ -4,6 +4,23 @@
     <string name="register">注册</string>
     <string name="account_hint">请输入用户名</string>
     <string name="pwd_hint">请输入密码</string>
+    <string name="follow_system">跟随系统暗色模式</string>
+    <string name="dark_mode">暗色模式</string>
+    <string name="later_read1">稍后阅读</string>
+    <string name="later_read2">不同于收藏，此功能无需登录，为本地操作，更换手机或重置app后已添加的数据将丢失</string>
+    <string name="read_history1">阅读历史</string>
+    <string name="read_history2">便于查找阅读过的文章，为本地操作，更换手机或重置app后已添加的数据将丢失</string>
+    <string name="show_top1">显示置顶</string>
+    <string name="show_top2">开启后首页显示置顶文章</string>
+    <string name="show_banner1">显示轮播</string>
+    <string name="show_banner2">开启后首页显示轮播图</string>
+    <string name="hide_author1">隐藏关于作者</string>
+    <string name="hide_author2">开启后隐藏我的页面的关于作者入口</string>
+    <string name="hide_project1">隐藏开源项目</string>
+    <string name="hide_project2">开启后隐藏我的页面的开源项目入口</string>
+    <string name="slide_back1">网页边缘滑动返回</string>
+    <string name="slide_back2">开启后网页仅在边缘可触发滑动返回，避免左右滑动代码时误触发滑动返回</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_later">LaterActivity</string>

@@ -16,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.firstdemo.R;
+import com.example.firstdemo.activity.ArticleDetailActivity;
 import com.example.firstdemo.activity.LoginActivity;
 import com.example.firstdemo.activity.MyCollectActivity;
 import com.example.firstdemo.api.Api;
@@ -125,14 +126,16 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ArticleV
 
 
             //点击列表题目项跳转到详情页面
-//            titleTextView.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    //TODO: 打开并渲染详情页
-//                    Intent in = new Intent(context, LoginActivity.class);
-//                    context.startActivity(in);
-//                }
-//            });
+            titleTextView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    //TODO: 打开并渲染详情页
+                    Intent in = new Intent(context, ArticleDetailActivity.class);
+                    //传递链接
+                    in.putExtra("article_url", article.getLink());
+                    context.startActivity(in);
+                }
+            });
 
 
             // 点击收藏按钮进行收藏操作或者取消收藏操作

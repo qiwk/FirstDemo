@@ -18,7 +18,7 @@
 
         <!-- 左侧按钮 -->
         <ImageButton
-            android:id="@+id/btnLeft1"
+            android:id="@+id/btn_goback"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"

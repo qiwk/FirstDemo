@@ -98,6 +98,10 @@ public class LoginActivity extends BaseActivity {
             return;
         }
 
+        // 如果登录成功，创建一个Intent将数据返回给之前的Activity
+        Intent intent = new Intent();
+        intent.putExtra("username", account);
+        intent.putExtra("password", pwd);
 
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("username", account);
@@ -115,10 +119,8 @@ public class LoginActivity extends BaseActivity {
                     //登录成功，保存token到本地并跳转
                     String cookieStr = String.join("----", resCookie);
                     insertVal(loginResponse.getLoginData().getNickname(), cookieStr);
-                    setResult(Activity.RESULT_OK);
+                    setResult(Activity.RESULT_OK, intent);
                     finish();
-//                    navigateToWithFlag(HomeActivity.class,
-//                            Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                     showToastSync("登录成功！");
                 } else {
                     showToastSync("登录失败！");

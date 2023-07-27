@@ -32,6 +32,8 @@
     <style name="FistDemoThemeAppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
 
 
+
+
 </resources>
 
     <!-- res/values/styles.xml -->

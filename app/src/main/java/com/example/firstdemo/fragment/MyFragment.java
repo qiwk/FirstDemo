@@ -50,6 +50,7 @@ import java.util.List;
  */
 public class MyFragment extends Fragment {
 
+    private String username;
     private Button loginButton;
 
     private ImageView headImage;
@@ -232,6 +233,7 @@ public class MyFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_LOGIN && resultCode == Activity.RESULT_OK) {
             // 登录成功，刷新界面显示
+            username = data.getStringExtra("username");
             showLoggedInState();
         }
     }
