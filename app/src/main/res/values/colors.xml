@@ -4,4 +4,6 @@
     <color name="white">#FFFFFFFF</color>
     <color name="splashscreen_bg">#658eee</color>
     <color name="home_btn_color">#0025ff</color>
+    <color name="redTop">#d81e06</color>
+
 </resources>

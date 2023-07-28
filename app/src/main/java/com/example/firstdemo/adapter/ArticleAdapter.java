@@ -2,9 +2,12 @@ package com.example.firstdemo.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.Html;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -69,16 +72,6 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ArticleV
         Article article = articleList.get(position);
         holder.bindArticleData(article);
 
-        //点击列表项跳转到详情页面
-//        holder.itemView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                //TODO: 打开并渲染详情页
-//                Intent in = new Intent(context, LoginActivity.class);
-//                context.startActivity(in);
-//            }
-//        });
-
 
     }
 
@@ -98,6 +91,7 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ArticleV
         private TextView authorTextView;
         private TextView publishTimeTextView;
         private TextView originTextView;
+        private TextView topTextView;
 
         private ImageButton collectButton;
 
@@ -108,6 +102,7 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ArticleV
             publishTimeTextView = itemView.findViewById(R.id.publishTimeTextView);
             originTextView = itemView.findViewById(R.id.originTextView);
             collectButton = itemView.findViewById(R.id.bt_collect);
+            topTextView = itemView.findViewById(R.id.tv_top_flag);
         }
 
         public void bindArticleData(Article article) {
@@ -117,12 +112,25 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ArticleV
             publishTimeTextView.setText(TimeUtils.getTimeAgo(article.getPublishTime()));
             originTextView.setText(article.getSuperChapterName());
 
+            //判断是否是置顶文章
+            if(article.getTopFlag()){
+                topTextView.setText("【置顶】");
+            }else {
+                topTextView.setText("");
+            }
+
+
+
+
+
             //判断要显示的收藏图标的颜色
             if(isCollected || article.isCollect()){
                 collectButton.setImageResource(R.mipmap.like_selected);
             }else {
                 collectButton.setImageResource(R.mipmap.like_unselected);
             }
+
+
 
 
             //点击列表题目项跳转到详情页面
@@ -254,4 +262,5 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ArticleV
         }
 
     }
+
 }

@@ -13,6 +13,12 @@ public class ApiConfig {
     public static final String DO_COLLECT = "/lg/collect"; //收藏文章
     public static final String UN_COLLECT_FROM_HOME = "/lg/uncollect_originId";
     public static final String UN_COLLECT_FROM_MY = "/lg/uncollect";
+    public static final String TOP_ARTICLE = "/article/top/json";
+
+    public static final String QUESTION = "/wenda/list";
+
+
+
 
     public static final String REGISTER = "/user/register";//注册
     public static final String VIDEO_LIST_ALL = "/app/videolist/listAll";//所有类型视频列表

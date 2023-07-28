@@ -68,8 +68,11 @@ public class MyFragment extends Fragment {
     private View upperLayout;
 
     private static final int REQUEST_LOGIN = 1;
+    private static final int REQUEST_SETTINGS = 2;
 
     private Handler handler; // 声明一个Handler，用于在主线程中更新UI
+
+    private SharedPreferences sp;
 
 
     public MyFragment() {
@@ -91,6 +94,7 @@ public class MyFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_my, container, false);
         handler = new Handler(Looper.getMainLooper()); // 初始化Handler
+        sp = getContext().getSharedPreferences("system_preferences", Context.MODE_PRIVATE);
 
         loginButton = (Button) view.findViewById(R.id.loginButton);
         headImage = view.findViewById(R.id.headImage);
@@ -141,6 +145,11 @@ public class MyFragment extends Fragment {
         } else {
             showLoggedOutState();
         }
+
+        //判断是否要隐藏相关项目
+        aboutAuthorView.setVisibility(sp.getBoolean("hide_author", false)?View.GONE:View.VISIBLE);
+        openProjectView.setVisibility(sp.getBoolean("hide_project", false)?View.GONE:View.VISIBLE);
+
         return view;
     }
 
@@ -182,11 +191,20 @@ public class MyFragment extends Fragment {
                 }
 
             }else if(id == R.id.laterRead){
-                intent = new Intent(getContext(), LaterReadActivity.class);
-                startActivity(intent);
+                if(sp.getBoolean("later_read", true)){
+                    intent = new Intent(getContext(), LaterReadActivity.class);
+                    startActivity(intent);
+                }else {
+                    ToastUtil.showMsg(getContext(), "稍后阅读已关闭！");
+                }
+
             }else if(id == R.id.readHistory){
-                intent = new Intent(getContext(), HistoryActivity.class);
-                startActivity(intent);
+                if(sp.getBoolean("read_history", true)){
+                    intent = new Intent(getContext(), HistoryActivity.class);
+                    startActivity(intent);
+                }else {
+                    ToastUtil.showMsg(getContext(), "阅读历史已关闭！");
+                }
             }else if(id == R.id.openProject){
                 intent = new Intent(getContext(), OpenProjectActivity.class);
                 startActivity(intent);
@@ -195,7 +213,7 @@ public class MyFragment extends Fragment {
                 startActivity(intent);
             }else if(id == R.id.systemSetting){
                 intent = new Intent(getContext(), SystemSettingActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent, REQUEST_SETTINGS);
             }
         }
 
@@ -235,6 +253,10 @@ public class MyFragment extends Fragment {
             // 登录成功，刷新界面显示
             username = data.getStringExtra("username");
             showLoggedInState();
+        } else if(requestCode == REQUEST_SETTINGS && resultCode == Activity.RESULT_OK){
+            //判断是否要隐藏相关项目
+            aboutAuthorView.setVisibility(sp.getBoolean("hide_author", false)?View.GONE:View.VISIBLE);
+            openProjectView.setVisibility(sp.getBoolean("hide_project", false)?View.GONE:View.VISIBLE);
         }
     }
 

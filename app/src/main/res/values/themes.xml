@@ -9,6 +9,7 @@
 
     </style>
 
+
     <style name="Theme.FirstDemo" parent="Base.Theme.FirstDemo" />
 
     <!-- Splash启动页Style -->
@@ -30,6 +31,15 @@
     </style>
 
     <style name="FistDemoThemeAppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+
+
+    <style name="AppTheme_Light" parent="Theme.AppCompat.Light">
+        <!-- 定义亮色主题的样式 -->
+    </style>
+
+    <style name="AppTheme_Dark" parent="Theme.AppCompat">
+        <!-- 定义暗色主题的样式 -->
+    </style>
 
 
 

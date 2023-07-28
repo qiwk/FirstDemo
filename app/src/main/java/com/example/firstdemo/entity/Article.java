@@ -79,6 +79,17 @@ public class Article {
 
     private int originId;
 
+    private boolean topFlag;
+
+    public boolean getTopFlag() {
+        return topFlag;
+    }
+
+    public void setTopFlag(boolean topFlag) {
+        this.topFlag = topFlag;
+    }
+
+
     public int getOriginId() {
         return originId;
     }

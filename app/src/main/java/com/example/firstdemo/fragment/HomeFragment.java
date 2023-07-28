@@ -1,6 +1,8 @@
 package com.example.firstdemo.fragment;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -33,6 +35,7 @@ import com.example.firstdemo.api.ApiConfig;
 import com.example.firstdemo.api.TtitCallback;
 import com.example.firstdemo.entity.Article;
 import com.example.firstdemo.entity.ArticleResponse;
+import com.example.firstdemo.entity.TopArticleResponse;
 import com.example.firstdemo.util.CommonUtils;
 import com.example.firstdemo.util.ToastUtil;
 import com.google.gson.Gson;
@@ -69,6 +72,8 @@ public class HomeFragment extends Fragment {
 
     private Handler handler; // 声明一个Handler，用于在主线程中更新UI
 
+    private SharedPreferences sp;
+
 
 
     public HomeFragment() {
@@ -86,12 +91,13 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
-
+        sp = getContext().getSharedPreferences("system_preferences", Context.MODE_PRIVATE);
         // 初始化Handler
         handler = new Handler(Looper.getMainLooper());
         // 初始化 Banner 组件
         banner = view.findViewById(R.id.banner);
         setupBanner();
+        banner.setVisibility(sp.getBoolean("show_banner", true)?View.VISIBLE:View.GONE);
 
         // 初始化文章列表和Volley请求队列
         articles = new ArrayList<>();
@@ -100,6 +106,11 @@ public class HomeFragment extends Fragment {
         //设置RecyclerView
         articleRecyclerView = view.findViewById(R.id.articleRecyclerView);
         setupRecyclerView();
+
+        //显示置顶文章
+        if(sp.getBoolean("show_top", false)){
+            getTopArticlesData();
+        }
 
         // 获取文章数据
         currentPage = 0;
@@ -130,6 +141,11 @@ public class HomeFragment extends Fragment {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                //显示置顶文章
+                if(sp.getBoolean("show_top", false)){
+                    articles.clear();
+                    getTopArticlesData();
+                }
                 // 执行下拉刷新操作，重新获取第一页数据
                 currentPage = 0;
                 articles.clear();
@@ -149,6 +165,7 @@ public class HomeFragment extends Fragment {
 
 
         String restUrl = ApiConfig.HOME_ARTICLE + "/" +  page + "/json";
+
         String cookieStr = CommonUtils.getCookie(getContext());
         Api.config(restUrl, params).getRequestWithCookie(cookieStr, new TtitCallback() {
             @Override
@@ -212,6 +229,82 @@ public class HomeFragment extends Fragment {
         isLoadingMore = true;
     }
 
+    private void getTopArticlesData() {
+
+
+        HashMap<String, String> params = new HashMap<String, String>();
+        params.put("username", "account");
+        params.put("password", "pwd");
+
+
+        String restUrl = ApiConfig.TOP_ARTICLE;
+
+        String cookieStr = CommonUtils.getCookie(getContext());
+        Api.config(restUrl, params).getRequestWithCookie(cookieStr, new TtitCallback() {
+            @Override
+            public void onSuccess(final String resBody, final List<String> resCookie) {
+
+                Log.d("onSuccess", resBody);
+                Log.d("Cookie", resCookie.toString());
+                Gson gson = new Gson();
+                TopArticleResponse topArticleResponse = gson.fromJson(resBody, TopArticleResponse.class);
+                if (topArticleResponse.getErrorCode() == 0) {
+                    // 使用Handler在主线程中更新UI
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            // 在这里更新UI控件，例如显示用户名和头像
+                            for(Article article:topArticleResponse.getArticleList()){
+                                article.setTopFlag(true);
+                                articles.add(article);
+                            }
+                            // 更新RecyclerView的数据
+                            ArticleAdapter articleAdapter = (ArticleAdapter) articleRecyclerView.getAdapter();
+                            articleAdapter.setArticleList(articles);
+                            articleAdapter.notifyDataSetChanged();
+
+                            // 停止下拉刷新动画
+                            swipeRefreshLayout.setRefreshing(false);
+                            //设置加载更多标志为false，表示加载完成
+                            isLoadingMore = false;
+                        }
+                    });
+                } else {
+                    // 使用Handler在主线程中更新UI
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            // 在这里更新UI控件，例如显示用户名和头像
+                            ToastUtil.showMsg(getContext(), "获取文章列表失败！");
+                            //设置加载更多标志为false，表示加载完成
+                            isLoadingMore = false;
+                            // 停止下拉刷新动画
+                            swipeRefreshLayout.setRefreshing(false);
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                // 使用Handler在主线程中更新UI
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        // 在这里更新UI控件，例如显示用户名和头像
+                        ToastUtil.showMsg(getContext(), "网络请求列表失败！");
+                        //设置加载更多标志为false，表示加载完成
+                        isLoadingMore = false;
+                        // 停止下拉刷新动画
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
+                });
+
+            }
+        });
+        // 设置加载更多标志为true，表示正在加载中
+        isLoadingMore = true;
+    }
 
 
 
