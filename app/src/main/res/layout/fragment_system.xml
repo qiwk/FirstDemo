@@ -1,16 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tl="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/white"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".fragment.SystemFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="体系页面"
-        android:textColor="@color/black"
-        android:textSize="30sp" />
 
-</FrameLayout>
+    <com.flyco.tablayout.SlidingTabLayout
+        android:id="@+id/slidingTabLayout"
+        android:layout_width="match_parent"
+        android:layout_height="77dp"
+        tl:tl_indicator_corner_radius="1.5dp"
+        android:background="@color/splashscreen_bg"
+        tl:tl_indicator_height="2dp"
+        tl:tl_indicator_width="30dp"
+        tl:tl_textSelectColor="@android:color/white"
+        tl:tl_textUnselectColor="@android:color/darker_gray"
+        tl:tl_indicator_color="@android:color/white"
+        android:paddingTop="42dp"
+        tl:tl_textsize="20sp"
+        tl:tl_tab_space_equal="true"/>
+
+    <com.example.firstdemo.view.FixedViewPager
+        android:id="@+id/fixedViewPager"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+
+
+
+</LinearLayout>

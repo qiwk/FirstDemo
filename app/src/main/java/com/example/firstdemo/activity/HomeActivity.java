@@ -83,6 +83,8 @@ public class HomeActivity extends BaseActivity {
             public void onTabReselect(int position) {
             }
         });
+        //预加载fragment
+        viewPager.setOffscreenPageLimit(mFragments.size());
 
         //滑动时按钮跟着改变
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
