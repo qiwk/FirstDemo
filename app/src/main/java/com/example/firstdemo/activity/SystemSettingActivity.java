@@ -9,6 +9,10 @@ import android.view.View;
 import android.widget.ImageButton;
 
 import com.example.firstdemo.R;
+import com.example.firstdemo.entity.ShowBannerEvent;
+
+import org.greenrobot.eventbus.EventBus;
+
 
 public class SystemSettingActivity extends AppCompatActivity {
 
@@ -26,6 +30,7 @@ public class SystemSettingActivity extends AppCompatActivity {
 
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,6 +38,9 @@ public class SystemSettingActivity extends AppCompatActivity {
 
         sp = getSharedPreferences("system_preferences", MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
+
+
+
 
         bt_follow_system = findViewById(R.id.bt_follow_system);
         bt_dark_mode = findViewById(R.id.bt_dark_mode);
@@ -141,9 +149,12 @@ public class SystemSettingActivity extends AppCompatActivity {
                 if(sp.getBoolean("show_banner", true)){
                     editor.putBoolean("show_banner", false);
                     bt_show_banner.setImageResource(R.mipmap.icon_off); // 设置关闭图标
+                    sendShowBannerEvent(false);
+
                 }else{
                     editor.putBoolean("show_banner", true);
                     bt_show_banner.setImageResource(R.mipmap.icon_on); // 设置开启图标
+                    sendShowBannerEvent(true);
                 }
                 editor.commit();
             }
@@ -203,4 +214,12 @@ public class SystemSettingActivity extends AppCompatActivity {
         //设置返回键
         findViewById(R.id.btn_goback).setOnClickListener(v -> onBackPressed());
     }
+
+
+
+    // 点击按钮后调用该方法发送隐藏 Banner 的事件
+    private void sendShowBannerEvent(boolean show) {
+        EventBus.getDefault().post(new ShowBannerEvent(show));
+    }
+
 }

@@ -6,35 +6,30 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.os.Handler;
 import android.os.Looper;
-import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
-import com.example.firstdemo.MainActivity;
 import com.example.firstdemo.R;
 import com.example.firstdemo.activity.ArticleDetailActivity;
-import com.example.firstdemo.activity.MyCollectActivity;
 import com.example.firstdemo.adapter.ArticleAdapter;
 import com.example.firstdemo.api.Api;
 import com.example.firstdemo.api.ApiConfig;
 import com.example.firstdemo.api.TtitCallback;
 import com.example.firstdemo.entity.Article;
 import com.example.firstdemo.entity.ArticleResponse;
+import com.example.firstdemo.entity.ShowBannerEvent;
 import com.example.firstdemo.entity.TopArticleResponse;
 import com.example.firstdemo.util.CommonUtils;
 import com.example.firstdemo.util.ToastUtil;
@@ -45,7 +40,9 @@ import com.youth.banner.holder.BannerImageHolder;
 import com.youth.banner.indicator.CircleIndicator;
 import com.youth.banner.listener.OnBannerListener;
 
-import org.json.JSONObject;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -91,6 +88,9 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
+        // 注册 EventBus
+        EventBus.getDefault().register(this);
+
         sp = getContext().getSharedPreferences("system_preferences", Context.MODE_PRIVATE);
         // 初始化Handler
         handler = new Handler(Looper.getMainLooper());
@@ -98,6 +98,9 @@ public class HomeFragment extends Fragment {
         banner = view.findViewById(R.id.banner);
         setupBanner();
         banner.setVisibility(sp.getBoolean("show_banner", true)?View.VISIBLE:View.GONE);
+
+
+
 
         // 初始化文章列表和Volley请求队列
         articles = new ArrayList<>();
@@ -355,6 +358,31 @@ public class HomeFragment extends Fragment {
         // 创建文章列表适配器并设置给RecyclerView
         ArticleAdapter articleAdapter = new ArticleAdapter(getContext(), articles, false);
         articleRecyclerView.setAdapter(articleAdapter);
+    }
+
+
+    // 接收事件，根据事件的值来隐藏或显示 Banner
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEvent(ShowBannerEvent event) {
+
+        boolean show = event.isShow();
+        if (show) {
+            // 显示 Banner
+            banner.setVisibility(View.VISIBLE);
+        } else {
+            // 隐藏 Banner
+            banner.setVisibility(View.GONE);
+        }
+        // 强制刷新 banner 所在的布局
+        banner.requestLayout();
+        banner.invalidate();
+    }
+
+    @Override
+    public void onDestroy() {
+        // 在 Fragment 销毁时解注册 EventBus
+        EventBus.getDefault().unregister(this);
+        super.onDestroy();
     }
 
 }
