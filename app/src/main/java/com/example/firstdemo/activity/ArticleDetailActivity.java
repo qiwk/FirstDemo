@@ -48,6 +48,17 @@ public class ArticleDetailActivity extends AppCompatActivity {
         findViewById(R.id.btn_goback_in_detail).setOnClickListener(v -> onBackPressed());
     }
 
+
+    // 处理回退操作
+    @Override
+    public void onBackPressed() {
+        if (webView.canGoBack()) {
+            webView.goBack();
+        } else {
+            super.onBackPressed();
+        }
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
