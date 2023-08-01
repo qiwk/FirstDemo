@@ -71,8 +71,6 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ArticleV
     public void onBindViewHolder(@NonNull ArticleViewHolder holder, int position) {
         Article article = articleList.get(position);
         holder.bindArticleData(article);
-
-
     }
 
     @Override
